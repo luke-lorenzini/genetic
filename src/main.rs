@@ -128,7 +128,6 @@ impl Thing {
             } else {
                 self.chromosomes_new_generation[i] = self.chromosomes[idx2].clone();
             }
-
         }
     }
 
