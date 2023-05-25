@@ -21,6 +21,39 @@ impl Thing {
         }
     }
 
+    pub fn rand(&mut self) {
+        for i in 0..self.population_size {
+            self.randomize_chromosome(i);
+        }
+    }
+
+    pub fn calculate_fitness(&mut self, index: usize, i: usize) -> f32 {
+        match i {
+            0 => self.function(index),
+            _ => self.max_ones(index),
+        }
+    }
+
+    pub fn tournament(&mut self) {
+        let mut rng = rand::thread_rng();
+        let max_val = self.population_size - 1;
+        let mut idx1;
+        let mut idx2;
+        for i in 0..self.population_size {
+            idx1 = rng.gen_range(0..=max_val);
+            idx2 = rng.gen_range(0..=max_val);
+            if self.fitnesses[idx1] > self.fitnesses[idx2] {
+                self.chromosomes_new_generation[i] = self.chromosomes[idx1].clone();
+            } else {
+                self.chromosomes_new_generation[i] = self.chromosomes[idx2].clone();
+            }
+        }
+    }
+
+    pub fn replace(&mut self) {
+        self.chromosomes = self.chromosomes_new_generation.clone();
+    }
+
     fn mutate(&mut self, index: usize) {
         let dist = WeightedIndex::new([self.mutation_probability, 1.0 - self.mutation_probability])
             .unwrap();
@@ -45,12 +78,6 @@ impl Thing {
         // println!();
     }
 
-    pub fn rand(&mut self) {
-        for i in 0..self.population_size {
-            self.randomize_chromosome(i);
-        }
-    }
-
     fn randomize_chromosome(&mut self, index: usize) {
         let mut rng = rand::thread_rng();
         let max_val = 1;
@@ -67,13 +94,6 @@ impl Thing {
     //     println!("{:?}", self.chromosomes_new_generation[i]);// * pc;
     //     println!("{:?}", self.chromosomes_new_generation[i+1]);// * pc;
     // }
-
-    pub fn calculate_fitness(&mut self, index: usize, i: usize) -> f32 {
-        match i {
-            0 => self.function(index),
-            _ => self.max_ones(index),
-        }
-    }
 
     fn max_ones(&mut self, index: usize) -> f32 {
         let mut fitness: f32 = 0.0;
@@ -107,7 +127,7 @@ impl Thing {
         xxx as f32
     }
 
-    fn roulette(&mut self) {
+    fn _roulette(&mut self) {
         let dist = WeightedIndex::new(&self.fitnesses).unwrap();
         let mut rng = rand::thread_rng();
         for i in 0..self.population_size {
@@ -115,27 +135,7 @@ impl Thing {
         }
     }
 
-    pub fn tournament(&mut self) {
-        let mut rng = rand::thread_rng();
-        let max_val = self.population_size - 1;
-        let mut idx1;
-        let mut idx2;
-        for i in 0..self.population_size {
-            idx1 = rng.gen_range(0..=max_val);
-            idx2 = rng.gen_range(0..=max_val);
-            if self.fitnesses[idx1] > self.fitnesses[idx2] {
-                self.chromosomes_new_generation[i] = self.chromosomes[idx1].clone();
-            } else {
-                self.chromosomes_new_generation[i] = self.chromosomes[idx2].clone();
-            }
-        }
-    }
-
-    pub fn replace(&mut self) {
-        self.chromosomes = self.chromosomes_new_generation.clone();
-    }
-
-    fn elite() {
+    fn _elite() {
         // store the best
     }
 }
