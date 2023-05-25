@@ -27,7 +27,7 @@ fn main() {
     // }
     xxx.rand();
 
-    for _gen in 0..xxx.generation {
+    for gen in 0..xxx.generation {
         // println!("Gneration: {gen}");
         for i in 0..xxx.population_size {
             xxx.fitnesses[i] = xxx.calculate_fitness(i, 1);
@@ -46,8 +46,7 @@ fn main() {
             }
         }
         println!(
-            "min:{} max:{} avg:{}",
-            min,
+            "gen:{gen} min:{min} max:{} avg:{}",
             max,
             sum / xxx.population_size as f32
         );
