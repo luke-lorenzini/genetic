@@ -1,5 +1,8 @@
 use genetic::Thing;
 
+// 1 for max ones
+const OPT_FUNC: usize = 1;
+
 fn main() {
     let genes = 16;
     let population_size = genes * 2;
@@ -30,7 +33,7 @@ fn main() {
     for gen in 0..xxx.generation {
         // println!("Gneration: {gen}");
         for i in 0..xxx.population_size {
-            xxx.fitnesses[i] = xxx.calculate_fitness(i, 1);
+            xxx.fitnesses[i] = xxx.calculate_fitness(i, OPT_FUNC);
         }
 
         sum = 0.0;
