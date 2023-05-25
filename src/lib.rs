@@ -2,19 +2,19 @@ use rand::distributions::WeightedIndex;
 use rand::prelude::*;
 use rand::Rng;
 
-struct Thing {
+pub struct Thing {
     // genes: usize,
-    population_size: usize,
-    generation: usize,
-    mutation_probability: f32,
+    pub population_size: usize,
+    pub generation: usize,
+    pub mutation_probability: f32,
     // crossover_probability:f32,
-    chromosomes: Vec<Vec<u8>>,
-    chromosomes_new_generation: Vec<Vec<u8>>,
-    fitnesses: Vec<f32>,
+    pub chromosomes: Vec<Vec<u8>>,
+    pub chromosomes_new_generation: Vec<Vec<u8>>,
+    pub fitnesses: Vec<f32>,
 }
 
 impl Thing {
-    fn muta(&mut self) {
+    pub fn muta(&mut self) {
         for i in 0..self.population_size {
             // mutate(&mut xxx.chromosomes_new_generation[i], xxx.mutation_probability);
             self.mutate(i);
@@ -45,7 +45,7 @@ impl Thing {
         // println!();
     }
 
-    fn rand(&mut self) {
+    pub fn rand(&mut self) {
         for i in 0..self.population_size {
             self.randomize_chromosome(i);
         }
@@ -68,7 +68,7 @@ impl Thing {
     //     println!("{:?}", self.chromosomes_new_generation[i+1]);// * pc;
     // }
 
-    fn calculate_fitness(&mut self, index: usize, i: usize) -> f32 {
+    pub fn calculate_fitness(&mut self, index: usize, i: usize) -> f32 {
         match i {
             0 => self.function(index),
             _ => self.max_ones(index),
@@ -115,7 +115,7 @@ impl Thing {
         }
     }
 
-    fn tournament(&mut self) {
+    pub fn tournament(&mut self) {
         let mut rng = rand::thread_rng();
         let max_val = self.population_size - 1;
         let mut idx1;
@@ -131,87 +131,11 @@ impl Thing {
         }
     }
 
-    fn replace(&mut self) {
+    pub fn replace(&mut self) {
         self.chromosomes = self.chromosomes_new_generation.clone();
     }
 
     fn elite() {
         // store the best
     }
-}
-
-fn main() {
-    let genes = 16;
-    let population_size = genes * 2;
-    let generation = population_size * 2;
-    let mutation_probability = 0.0005;
-    // let crossover_probability = 0.0;
-
-    let mut max = f32::MIN;
-    let mut min = f32::MAX;
-    let mut sum = 0.0;
-
-    let mut xxx = Thing {
-        // genes,
-        population_size,
-        generation,
-        mutation_probability,
-        // crossover_probability,
-        chromosomes: vec![vec![0; genes]; population_size],
-        fitnesses: vec![0.0; population_size],
-        chromosomes_new_generation: vec![vec![0; genes]; population_size],
-    };
-
-    // for i in 0..xxx.population_size {
-    //     xxx.randomize_chromosome(i);
-    // }
-    xxx.rand();
-
-    for _gen in 0..xxx.generation {
-        // println!("Gneration: {gen}");
-        for i in 0..xxx.population_size {
-            xxx.fitnesses[i] = xxx.calculate_fitness(i, 1);
-        }
-
-        sum = 0.0;
-        max = f32::MIN;
-        min = f32::MAX;
-        for i in 0..xxx.population_size {
-            sum += xxx.fitnesses[i];
-            if xxx.fitnesses[i] > max {
-                max = xxx.fitnesses[i];
-            }
-            if xxx.fitnesses[i] < min {
-                min = xxx.fitnesses[i];
-            }
-        }
-        println!(
-            "min:{} max:{} avg:{}",
-            min,
-            max,
-            sum / xxx.population_size as f32
-        );
-
-        // xxx.roulette();
-        xxx.tournament();
-
-        // //     // crossover(&mut xxx.chromosomes_new_generation, crossover_probability, i);
-        // // }
-
-        // for i in 0..xxx.population_size {
-        //     // mutate(&mut xxx.chromosomes_new_generation[i], xxx.mutation_probability);
-        //     xxx.mutate(i);
-        // }
-        xxx.muta();
-
-        // xxx.chromosomes = xxx.chromosomes_new_generation.clone();
-        xxx.replace();
-    }
-
-    println!(
-        "min:{} max:{} avg:{}",
-        min,
-        max,
-        sum / xxx.population_size as f32
-    );
 }
