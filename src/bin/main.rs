@@ -8,18 +8,18 @@ fn main() {
     let population_size = genes * 2;
     let generation = population_size * 2;
     let mutation_probability = 0.0005;
-    // let crossover_probability = 0.0;
+    let crossover_probability = 0.7;
 
     let mut max = f32::MIN;
     let mut min = f32::MAX;
     let mut sum = 0.0;
 
     let mut xxx = Thing {
-        // genes,
+        genes,
         population_size,
         generation,
         mutation_probability,
-        // crossover_probability,
+        crossover_probability,
         chromosomes: vec![vec![0; genes]; population_size],
         fitnesses: vec![0.0; population_size],
         chromosomes_new_generation: vec![vec![0; genes]; population_size],
@@ -57,7 +57,8 @@ fn main() {
         // xxx.roulette();
         xxx.tournament();
 
-        // //     // crossover(&mut xxx.chromosomes_new_generation, crossover_probability, i);
+        xxx.xover();
+        // xxx.crossover(&mut xxx.chromosomes_new_generation, crossover_probability, i);
         // // }
 
         // for i in 0..xxx.population_size {
@@ -71,7 +72,7 @@ fn main() {
     }
 
     println!(
-        "min:{} max:{} avg:{}",
+        "gen:{generation} min:{} max:{} avg:{}",
         min,
         max,
         sum / xxx.population_size as f32

@@ -3,11 +3,11 @@ use rand::prelude::*;
 use rand::Rng;
 
 pub struct Thing {
-    // genes: usize,
+    pub genes: usize,
     pub population_size: usize,
     pub generation: usize,
     pub mutation_probability: f32,
-    // crossover_probability:f32,
+    pub crossover_probability: f32,
     pub chromosomes: Vec<Vec<u8>>,
     pub chromosomes_new_generation: Vec<Vec<u8>>,
     pub fitnesses: Vec<f32>,
@@ -50,8 +50,18 @@ impl Thing {
         }
     }
 
+    pub fn xover(&mut self) {
+        for i in (0..self.population_size - 1).step_by(2) {
+            self.crossover(i);
+        }
+    }
+
     pub fn replace(&mut self) {
         self.chromosomes = self.chromosomes_new_generation.clone();
+
+        // for i in 0..self.chromosomes.len() {
+        //     println!("{:?}", self.chromosomes[i]);
+        // }
     }
 
     fn mutate(&mut self, index: usize) {
@@ -90,10 +100,32 @@ impl Thing {
         // println!("");
     }
 
-    // fn crossover(self, pc:f32, i: usize) {
-    //     println!("{:?}", self.chromosomes_new_generation[i]);// * pc;
-    //     println!("{:?}", self.chromosomes_new_generation[i+1]);// * pc;
-    // }
+    fn crossover(&mut self, index: usize) {
+        let dist =
+            WeightedIndex::new([self.crossover_probability, 1.0 - self.crossover_probability])
+                .unwrap();
+        let mut rng = rand::thread_rng();
+        let x = dist.sample(&mut rng);
+
+        if x == 1 {
+            let xover_point = rng.gen_range(0..=self.genes);
+
+            // println!("Before Xover: {index}");
+            // println!("xover point {xover_point}");
+            // println!("{:?}", self.chromosomes_new_generation[index]); // * self.crossover_probability;
+            // println!("{:?}", self.chromosomes_new_generation[index + 1]); // * pc;
+            for i in 0..xover_point {
+                let a = self.chromosomes_new_generation[index][i];
+                self.chromosomes_new_generation[index][i] =
+                    self.chromosomes_new_generation[index + 1][i];
+                self.chromosomes_new_generation[index + 1][i] = a;
+            }
+            // println!("After Xover");
+            // println!("{xover_point}");
+            // println!("{:?}", self.chromosomes_new_generation[index]); // * self.crossover_probability;
+            // println!("{:?}", self.chromosomes_new_generation[index + 1]); // * pc;
+        }
+    }
 
     fn max_ones(&mut self, index: usize) -> f32 {
         let mut fitness: f32 = 0.0;
@@ -109,7 +141,7 @@ impl Thing {
     fn function(&mut self, index: usize) -> f32 {
         // yx^2-x^4
         // 3 bits
-        //x = 1, y = 5
+        // x = 1, y = 5
         // let fitness = 0.0;
         let mut x = 0;
         let mut y = 0;
@@ -124,6 +156,7 @@ impl Thing {
 
         // (x * y).into()
         let xxx: i32 = y as i32 * (x as i32 ^ 2) - (x as i32 ^ 4);
+        println!("x:{x} y:{y} xxx:{xxx}");
         xxx as f32
     }
 
