@@ -29,7 +29,7 @@ impl Thing {
 
     pub fn calculate_fitness(&mut self, index: usize, i: usize) -> f32 {
         match i {
-            0 => self.function(index),
+            0 => self.opt_function(index),
             _ => self.max_ones(index),
         }
     }
@@ -138,10 +138,10 @@ impl Thing {
         fitness
     }
 
-    fn function(&mut self, index: usize) -> f32 {
+    fn opt_function(&mut self, index: usize) -> f32 {
         // yx^2-x^4
         // 3 bits
-        // x = 1, y = 5
+        // x = 2, y = 7
         // let fitness = 0.0;
         let mut x = 0;
         let mut y = 0;
@@ -155,8 +155,8 @@ impl Thing {
         }
 
         // (x * y).into()
-        let xxx: i32 = y as i32 * (x as i32 ^ 2) - (x as i32 ^ 4);
-        println!("x:{x} y:{y} xxx:{xxx}");
+        let xxx = y as i32 * i32::pow(x as i32, 2) - i32::pow(x as i32, 4);
+        // println!("x:{x} y:{y} xxx:{xxx}");
         xxx as f32
     }
 
@@ -171,4 +171,94 @@ impl Thing {
     fn _elite() {
         // store the best
     }
+}
+
+#[test]
+fn test_function() {
+    // optimization function is 0
+    const OPT_FUNC: usize = 0;
+
+    let genes = 6;
+    let population_size = 1;
+
+    let mut xxx = Thing {
+        genes,
+        population_size,
+        generation: 0,
+        mutation_probability: 0.0,
+        crossover_probability: 0.0,
+        chromosomes: vec![vec![0; genes]; population_size],
+        fitnesses: vec![0.0; population_size],
+        chromosomes_new_generation: vec![vec![0; genes]; population_size],
+    };
+
+    // Test for x=0 and y=0, res=0.0
+    for i in 0..genes {
+        xxx.chromosomes[0][i] = 0;
+    }
+    let res = xxx.calculate_fitness(0, OPT_FUNC);
+    assert_eq!(0.0, res);
+
+    // Test for x=7 and y=7, res=-2058.0
+    for i in 0..genes {
+        xxx.chromosomes[0][i] = 1;
+    }
+    let res = xxx.calculate_fitness(0, OPT_FUNC);
+    assert_eq!(-2058.0, res);
+
+    // Test for x=2 and y=7, res=12.0
+    for i in 0..genes {
+        xxx.chromosomes[0][i] = 0;
+    }
+    xxx.chromosomes[0][1] = 1;
+    xxx.chromosomes[0][3] = 1;
+    xxx.chromosomes[0][4] = 1;
+    xxx.chromosomes[0][5] = 1;
+    let res = xxx.calculate_fitness(0, OPT_FUNC);
+    assert_eq!(12.0, res);
+}
+
+#[test]
+fn test_max_ones() {
+    // Max ones is 1
+    const OPT_FUNC: usize = 1;
+
+    let genes = 6;
+    let population_size = 1;
+
+    let mut xxx = Thing {
+        genes,
+        population_size,
+        generation: 0,
+        mutation_probability: 0.0,
+        crossover_probability: 0.0,
+        chromosomes: vec![vec![0; genes]; population_size],
+        fitnesses: vec![0.0; population_size],
+        chromosomes_new_generation: vec![vec![0; genes]; population_size],
+    };
+
+    // Test for x=0 and y=0, res=0.0
+    for i in 0..genes {
+        xxx.chromosomes[0][i] = 0;
+    }
+    let res = xxx.calculate_fitness(0, OPT_FUNC);
+    assert_eq!(0.0, res);
+
+    // Test for x=7 and y=7, res=6
+    for i in 0..genes {
+        xxx.chromosomes[0][i] = 1;
+    }
+    let res = xxx.calculate_fitness(0, OPT_FUNC);
+    assert_eq!(6.0, res);
+
+    // Test for x=2 and y=7, res=9.0
+    for i in 0..genes {
+        xxx.chromosomes[0][i] = 0;
+    }
+    xxx.chromosomes[0][1] = 1;
+    xxx.chromosomes[0][3] = 1;
+    xxx.chromosomes[0][4] = 1;
+    xxx.chromosomes[0][5] = 1;
+    let res = xxx.calculate_fitness(0, OPT_FUNC);
+    assert_eq!(4.0, res);
 }
