@@ -154,7 +154,7 @@ impl Thing {
         }
     }
 
-    fn calculate_fitness(&mut self, f: fn(&mut Vec<u8>) -> f32, arg: usize) -> f32 {
+    pub fn calculate_fitness(&mut self, f: fn(&mut Vec<u8>) -> f32, arg: usize) -> f32 {
         f(&mut self.chromosomes[arg])
     }
 
