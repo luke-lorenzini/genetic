@@ -95,9 +95,8 @@ fn opt_function(chromosome: &mut Vec<u8>) -> f32 {
     }
 
     // (x * y).into()
-    let fitness = (y as i32 * i32::pow(x as i32, 2) - i32::pow(x as i32, 4)) as f32;
+    (y as i32 * i32::pow(x as i32, 2) - i32::pow(x as i32, 4)) as f32
     // println!("x:{x} y:{y} xxx:{xxx}");
-    fitness
 }
 
 fn knapsack(chromosome: &mut Vec<u8>) -> f32 {

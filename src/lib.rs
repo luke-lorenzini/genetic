@@ -96,8 +96,11 @@ impl Genetic for Thing {
                 sum / self.population_size as f32,
             );
 
-            // xxx.roulette();
-            self.tournament();
+            if false {
+                self.roulette();
+            } else {
+                self.tournament();
+            }
 
             self.xover();
 
