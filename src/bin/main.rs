@@ -12,10 +12,10 @@ fn main() {
     let mut sum = 0.0;
 
     let mut xxx = Thing::new(
-        genes, 
-        population_size, 
-        generation, 
-        mutation_probability, 
+        genes,
+        population_size,
+        generation,
+        mutation_probability,
         crossover_probability,
         vec![vec![0; genes]; population_size],
         vec![vec![0; genes]; population_size],
@@ -108,12 +108,54 @@ fn opt_function(chromosome: &mut Vec<u8>) -> f32 {
     fitness
 }
 
+fn knapsack(chromosome: &mut Vec<u8>) -> f32 {
+    let mut fitness = 0.0;
+    let max_weight = 15.0;
+
+    let mut a = 0;
+    let mut b = 0;
+    let mut c = 0;
+    let mut d = 0;
+    let mut e = 0;
+
+    for i in 0..3 {
+        a = (a << 1) | chromosome[i];
+    }
+
+    for i in 3..6 {
+        b = (b << 1) | chromosome[i];
+    }
+
+    for i in 6..9 {
+        c = (c << 1) | chromosome[i];
+    }
+
+    for i in 9..12 {
+        d = (d << 1) | chromosome[i];
+    }
+
+    for i in 12..15 {
+        e = (e << 1) | chromosome[i];
+    }
+
+    // weight
+    let w = 12.0 * a as f32 + 2.0 * b as f32 + 1.0 * c as f32 + 1.0 * d as f32 + 4.0 * e as f32;
+
+    if w <= max_weight {
+        // value
+        fitness =
+            4.0 * a as f32 + 2.0 * b as f32 + 2.0 * c as f32 + 1.0 * d as f32 + 10.0 * e as f32
+    }
+
+    fitness
+}
+
 #[test]
 fn test_max_ones() {
     let genes = 6;
     let population_size = 1;
 
-    let mut xxx = Thing::new (
+    let mut xxx = Thing::new(
         genes,
         population_size,
         0,
@@ -155,7 +197,7 @@ fn test_opt_function() {
     let genes = 6;
     let population_size = 1;
 
-    let mut xxx = Thing::new (
+    let mut xxx = Thing::new(
         genes,
         population_size,
         0,

@@ -14,7 +14,16 @@ pub struct Thing {
 }
 
 pub trait Genetic {
-    fn new(genes: usize, population_size: usize, generation: usize, mutation_probability: f32, crossover_probability: f32, chromosomes: Vec<Vec<u8>>, chromosomes_new_generation: Vec<Vec<u8>>, fitnesses: Vec<f32>) -> Self;
+    fn new(
+        genes: usize,
+        population_size: usize,
+        generation: usize,
+        mutation_probability: f32,
+        crossover_probability: f32,
+        chromosomes: Vec<Vec<u8>>,
+        chromosomes_new_generation: Vec<Vec<u8>>,
+        fitnesses: Vec<f32>,
+    ) -> Self;
     fn muta(&mut self);
     fn rand(&mut self);
     fn calculate_fitness(&mut self, f: fn(&mut Vec<u8>) -> f32, arg: usize) -> f32;
@@ -26,10 +35,10 @@ pub trait Genetic {
 
 impl Default for Thing {
     fn default() -> Self {
-        Thing { 
-            genes: 1, 
-            population_size: 2, 
-            generation: 4, 
+        Thing {
+            genes: 1,
+            population_size: 2,
+            generation: 4,
             mutation_probability: 0.0005,
             crossover_probability: 0.7,
             chromosomes: vec![vec![0; 1]; 2],
@@ -40,9 +49,18 @@ impl Default for Thing {
 }
 
 impl Genetic for Thing {
-    fn new(genes: usize, population_size: usize, generation: usize, mutation_probability: f32, crossover_probability: f32, chromosomes: Vec<Vec<u8>>, chromosomes_new_generation: Vec<Vec<u8>>, fitnesses: Vec<f32>) -> Thing {
-        Thing { 
-            genes, 
+    fn new(
+        genes: usize,
+        population_size: usize,
+        generation: usize,
+        mutation_probability: f32,
+        crossover_probability: f32,
+        chromosomes: Vec<Vec<u8>>,
+        chromosomes_new_generation: Vec<Vec<u8>>,
+        fitnesses: Vec<f32>,
+    ) -> Thing {
+        Thing {
+            genes,
             population_size,
             generation,
             mutation_probability,
@@ -75,7 +93,7 @@ impl Genetic for Thing {
             //     }
             // });
             self.mutate(i);
-            
+
             // handles.push(handle);
         }
 
@@ -198,7 +216,6 @@ impl Thing {
             // println!("{:?}", self.chromosomes_new_generation[index + 1]); // * pc;
         }
     }
-
 
     fn _elite() {
         // store the best
