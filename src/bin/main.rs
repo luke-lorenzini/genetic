@@ -1,7 +1,7 @@
-use genetic::Thing;
+use genetic::{Genetic, Thing};
 
 fn main() {
-    let genes = 16;
+    let genes = 512;
     let population_size = genes * 2;
     let generation = population_size * 2;
     let mutation_probability = 0.0005;
@@ -11,16 +11,16 @@ fn main() {
     let mut min = f32::MAX;
     let mut sum = 0.0;
 
-    let mut xxx = Thing {
-        genes,
-        population_size,
-        generation,
-        mutation_probability,
+    let mut xxx = Thing::new(
+        genes, 
+        population_size, 
+        generation, 
+        mutation_probability, 
         crossover_probability,
-        chromosomes: vec![vec![0; genes]; population_size],
-        fitnesses: vec![0.0; population_size],
-        chromosomes_new_generation: vec![vec![0; genes]; population_size],
-    };
+        vec![vec![0; genes]; population_size],
+        vec![vec![0; genes]; population_size],
+        vec![0.0; population_size],
+    );
 
     // for i in 0..xxx.population_size {
     //     xxx.randomize_chromosome(i);
@@ -30,7 +30,7 @@ fn main() {
     for gen in 0..xxx.generation {
         // println!("Gneration: {gen}");
         for i in 0..xxx.population_size {
-            xxx.fitnesses[i] = xxx.calculate_fitness(opt_function, i);
+            xxx.fitnesses[i] = xxx.calculate_fitness(max_ones, i);
         }
 
         sum = 0.0;
@@ -48,7 +48,7 @@ fn main() {
         println!(
             "gen:{gen} min:{min} max:{} avg:{}",
             max,
-            sum / xxx.population_size as f32
+            sum / xxx.population_size as f32,
         );
 
         // xxx.roulette();
@@ -77,7 +77,7 @@ fn main() {
 }
 
 fn max_ones(chromosome: &mut Vec<u8>) -> f32 {
-    let mut fitness: f32 = 0.0;
+    let mut fitness = 0.0;
 
     for i in 0..chromosome.len() {
         fitness += f32::from(chromosome[i]);
@@ -91,22 +91,21 @@ fn opt_function(chromosome: &mut Vec<u8>) -> f32 {
     // yx^2-x^4
     // 3 bits
     // x = 2, y = 7
-    // let fitness = 0.0;
     let mut x = 0;
     let mut y = 0;
 
-    for i in 0..3 {
-        x = (x << 1) | chromosome[i];
+    for val in chromosome.iter().take(3) {
+        x = (x << 1) | val;
     }
 
-    for i in 3..6 {
-        y = (y << 1) | chromosome[i];
+    for val in chromosome.iter().take(6).skip(3) {
+        y = (y << 1) | val;
     }
 
     // (x * y).into()
-    let xxx = y as i32 * i32::pow(x as i32, 2) - i32::pow(x as i32, 4);
+    let fitness = (y as i32 * i32::pow(x as i32, 2) - i32::pow(x as i32, 4)) as f32;
     // println!("x:{x} y:{y} xxx:{xxx}");
-    xxx as f32
+    fitness
 }
 
 #[test]
@@ -114,16 +113,16 @@ fn test_max_ones() {
     let genes = 6;
     let population_size = 1;
 
-    let mut xxx = Thing {
+    let mut xxx = Thing::new (
         genes,
         population_size,
-        generation: 0,
-        mutation_probability: 0.0,
-        crossover_probability: 0.0,
-        chromosomes: vec![vec![0; genes]; population_size],
-        fitnesses: vec![0.0; population_size],
-        chromosomes_new_generation: vec![vec![0; genes]; population_size],
-    };
+        0,
+        0.0,
+        0.0,
+        vec![vec![0; genes]; population_size],
+        vec![vec![0; genes]; population_size],
+        vec![0.0; population_size],
+    );
 
     // Test for x=0 and y=0, res=0.0
     for i in 0..genes {
@@ -152,20 +151,20 @@ fn test_max_ones() {
 }
 
 #[test]
-fn test_function() {
+fn test_opt_function() {
     let genes = 6;
     let population_size = 1;
 
-    let mut xxx = Thing {
+    let mut xxx = Thing::new (
         genes,
         population_size,
-        generation: 0,
-        mutation_probability: 0.0,
-        crossover_probability: 0.0,
-        chromosomes: vec![vec![0; genes]; population_size],
-        fitnesses: vec![0.0; population_size],
-        chromosomes_new_generation: vec![vec![0; genes]; population_size],
-    };
+        0,
+        0.0,
+        0.0,
+        vec![vec![0; genes]; population_size],
+        vec![vec![0; genes]; population_size],
+        vec![0.0; population_size],
+    );
 
     // Test for x=0 and y=0, res=0.0
     for i in 0..genes {
