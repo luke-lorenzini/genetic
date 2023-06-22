@@ -7,9 +7,9 @@ fn main() {
     let mutation_probability = 0.0005;
     let crossover_probability = 0.7;
 
-    let mut max = f32::MIN;
-    let mut min = f32::MAX;
-    let mut sum = 0.0;
+    // let mut max = f32::MIN;
+    // let mut min = f32::MAX;
+    // let mut sum = 0.0;
 
     let mut xxx = Thing::new(
         genes,
@@ -22,48 +22,50 @@ fn main() {
         vec![0.0; population_size],
     );
 
-    xxx.rand();
+    xxx.evolve(max_ones);
 
-    for gen in 0..xxx.generation {
-        // println!("Gneration: {gen}");
-        for i in 0..xxx.population_size {
-            xxx.fitnesses[i] = xxx.calculate_fitness(max_ones, i);
-        }
+    // xxx.rand();
 
-        sum = 0.0;
-        max = f32::MIN;
-        min = f32::MAX;
-        for i in 0..xxx.population_size {
-            sum += xxx.fitnesses[i];
-            if xxx.fitnesses[i] > max {
-                max = xxx.fitnesses[i];
-            }
-            if xxx.fitnesses[i] < min {
-                min = xxx.fitnesses[i];
-            }
-        }
-        println!(
-            "gen:{gen} min:{min} max:{} avg:{}",
-            max,
-            sum / xxx.population_size as f32,
-        );
+    // for gen in 0..xxx.generation {
+    //     // println!("Gneration: {gen}");
+    //     for i in 0..xxx.population_size {
+    //         xxx.fitnesses[i] = xxx.calculate_fitness(max_ones, i);
+    //     }
 
-        // xxx.roulette();
-        xxx.tournament();
+    //     sum = 0.0;
+    //     max = f32::MIN;
+    //     min = f32::MAX;
+    //     for i in 0..xxx.population_size {
+    //         sum += xxx.fitnesses[i];
+    //         if xxx.fitnesses[i] > max {
+    //             max = xxx.fitnesses[i];
+    //         }
+    //         if xxx.fitnesses[i] < min {
+    //             min = xxx.fitnesses[i];
+    //         }
+    //     }
+    //     println!(
+    //         "gen:{gen} min:{min} max:{} avg:{}",
+    //         max,
+    //         sum / xxx.population_size as f32,
+    //     );
 
-        xxx.xover();
+    //     // xxx.roulette();
+    //     xxx.tournament();
 
-        xxx.muta();
+    //     xxx.xover();
 
-        xxx.replace();
-    }
+    //     xxx.muta();
 
-    println!(
-        "gen:{generation} min:{} max:{} avg:{}",
-        min,
-        max,
-        sum / xxx.population_size as f32
-    );
+    //     xxx.replace();
+    // }
+
+    // println!(
+    //     "gen:{generation} min:{} max:{} avg:{}",
+    //     min,
+    //     max,
+    //     sum / xxx.population_size as f32
+    // );
 }
 
 fn max_ones(chromosome: &mut Vec<u8>) -> f32 {

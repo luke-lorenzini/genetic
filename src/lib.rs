@@ -24,6 +24,7 @@ pub trait Genetic {
         chromosomes_new_generation: Vec<Vec<u8>>,
         fitnesses: Vec<f32>,
     ) -> Self;
+    fn evolve(&mut self, f: fn(&mut Vec<u8>) -> f32);
     fn muta(&mut self);
     fn rand(&mut self);
     fn calculate_fitness(&mut self, f: fn(&mut Vec<u8>) -> f32, arg: usize) -> f32;
@@ -71,6 +72,56 @@ impl Genetic for Thing {
         }
     }
 
+    fn evolve(&mut self, f: fn(&mut Vec<u8>) -> f32) {
+        let mut max = f32::MIN;
+        let mut min = f32::MAX;
+        let mut sum = 0.0;
+
+        self.rand();
+
+        for gen in 0..self.generation {
+            // println!("Gneration: {gen}");
+            for i in 0..self.population_size {
+                self.fitnesses[i] = self.calculate_fitness(f, i);
+            }
+
+            sum = 0.0;
+            max = f32::MIN;
+            min = f32::MAX;
+            for i in 0..self.population_size {
+                sum += self.fitnesses[i];
+                if self.fitnesses[i] > max {
+                    max = self.fitnesses[i];
+                }
+                if self.fitnesses[i] < min {
+                    min = self.fitnesses[i];
+                }
+            }
+            println!(
+                "gen:{gen} min:{min} max:{} avg:{}",
+                max,
+                sum / self.population_size as f32,
+            );
+
+            // xxx.roulette();
+            self.tournament();
+
+            self.xover();
+
+            self.muta();
+
+            self.replace();
+        }
+
+        println!(
+            "gen:{} min:{} max:{} avg:{}",
+            self.generation,
+            min,
+            max,
+            sum / self.population_size as f32
+        );
+    }
+
     fn muta(&mut self) {
         // let mut handles = vec![];
         // let mp = self.mutation_probability;
@@ -109,9 +160,7 @@ impl Genetic for Thing {
     }
 
     fn calculate_fitness(&mut self, f: fn(&mut Vec<u8>) -> f32, arg: usize) -> f32 {
-        let xxx = f(&mut self.chromosomes[arg]);
-
-        xxx
+        f(&mut self.chromosomes[arg])
     }
 
     fn tournament(&mut self) {
