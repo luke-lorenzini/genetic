@@ -22,9 +22,6 @@ fn main() {
         vec![0.0; population_size],
     );
 
-    // for i in 0..xxx.population_size {
-    //     xxx.randomize_chromosome(i);
-    // }
     xxx.rand();
 
     for gen in 0..xxx.generation {
@@ -55,16 +52,9 @@ fn main() {
         xxx.tournament();
 
         xxx.xover();
-        // xxx.crossover(&mut xxx.chromosomes_new_generation, crossover_probability, i);
-        // // }
 
-        // for i in 0..xxx.population_size {
-        //     // mutate(&mut xxx.chromosomes_new_generation[i], xxx.mutation_probability);
-        //     xxx.mutate(i);
-        // }
         xxx.muta();
 
-        // xxx.chromosomes = xxx.chromosomes_new_generation.clone();
         xxx.replace();
     }
 
@@ -233,3 +223,6 @@ fn test_opt_function() {
     let res = xxx.calculate_fitness(opt_function, 0);
     assert_eq!(12.0, res);
 }
+
+#[test]
+fn test_knapsack() {}
