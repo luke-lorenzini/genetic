@@ -25,13 +25,6 @@ pub trait Genetic {
         fitnesses: Vec<f32>,
     ) -> Self;
     fn evolve(&mut self, f: fn(&mut Vec<u8>) -> f32);
-    fn muta(&mut self);
-    fn rand(&mut self);
-    fn calculate_fitness(&mut self, f: fn(&mut Vec<u8>) -> f32, arg: usize) -> f32;
-    fn tournament(&mut self);
-    fn roulette(&mut self);
-    fn xover(&mut self);
-    fn replace(&mut self);
 }
 
 impl Default for Thing {
@@ -121,7 +114,9 @@ impl Genetic for Thing {
             sum / self.population_size as f32
         );
     }
+}
 
+impl Thing {
     fn muta(&mut self) {
         // let mut handles = vec![];
         // let mp = self.mutation_probability;
@@ -200,9 +195,7 @@ impl Genetic for Thing {
         //     println!("{:?}", self.chromosomes[i]);
         // }
     }
-}
 
-impl Thing {
     fn mutate(&mut self, index: usize) {
         let dist = WeightedIndex::new([self.mutation_probability, 1.0 - self.mutation_probability])
             .unwrap();
