@@ -13,18 +13,8 @@ pub struct Thing {
     pub fitnesses: Vec<f32>,
 }
 
-pub trait Genetic {
-    fn new(
-        genes: usize,
-        population_size: usize,
-        generation: usize,
-        mutation_probability: f32,
-        crossover_probability: f32,
-        chromosomes: Vec<Vec<u8>>,
-        chromosomes_new_generation: Vec<Vec<u8>>,
-        fitnesses: Vec<f32>,
-    ) -> Self;
-    fn evolve(&mut self, f: fn(&mut Vec<u8>) -> f32);
+pub trait Fitness {
+    fn fitness(chromosome: &mut Vec<u8>) -> f32;
 }
 
 impl Default for Thing {
@@ -42,8 +32,8 @@ impl Default for Thing {
     }
 }
 
-impl Genetic for Thing {
-    fn new(
+impl Thing {
+    pub fn new(
         genes: usize,
         population_size: usize,
         generation: usize,
@@ -65,7 +55,7 @@ impl Genetic for Thing {
         }
     }
 
-    fn evolve(&mut self, f: fn(&mut Vec<u8>) -> f32) {
+    pub fn evolve(&mut self, f: fn(&mut Vec<u8>) -> f32) {
         let mut max = f32::MIN;
         let mut min = f32::MAX;
         let mut sum = 0.0;
@@ -117,9 +107,7 @@ impl Genetic for Thing {
             sum / self.population_size as f32
         );
     }
-}
 
-impl Thing {
     fn muta(&mut self) {
         // let mut handles = vec![];
         // let mp = self.mutation_probability;
