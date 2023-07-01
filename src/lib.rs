@@ -110,13 +110,20 @@ impl Thing {
 
     fn mutate(&mut self) {
         for i in 0..self.population_size {
-            let dist = WeightedIndex::new([self.mutation_probability, 1.0 - self.mutation_probability]).unwrap();
+            let dist =
+                WeightedIndex::new([self.mutation_probability, 1.0 - self.mutation_probability])
+                    .unwrap();
             let mut rng = rand::thread_rng();
 
             for j in 0..self.chromosomes_new_generation[i].len() {
                 let x = dist.sample(&mut rng);
                 if x == 0 {
-                    self.chromosomes_new_generation[i][j] = if self.chromosomes_new_generation[i][j] == 0 {1} else {0};
+                    self.chromosomes_new_generation[i][j] =
+                        if self.chromosomes_new_generation[i][j] == 0 {
+                            1
+                        } else {
+                            0
+                        };
                 }
             }
         }
