@@ -158,7 +158,6 @@ impl Thing {
 
     fn crossover(&mut self) {
         for i in (0..self.population_size - 1).step_by(2) {
-            // self.crossover(i);
             let dist =
                 WeightedIndex::new([self.crossover_probability, 1.0 - self.crossover_probability])
                     .unwrap();
