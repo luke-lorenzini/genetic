@@ -92,7 +92,7 @@ impl Thing {
                 self.tournament();
             }
 
-            self.xover();
+            self.crossover();
 
             self.mutate();
 
@@ -156,9 +156,33 @@ impl Thing {
         }
     }
 
-    fn xover(&mut self) {
+    fn crossover(&mut self) {
         for i in (0..self.population_size - 1).step_by(2) {
-            self.crossover(i);
+            // self.crossover(i);
+            let dist =
+                WeightedIndex::new([self.crossover_probability, 1.0 - self.crossover_probability])
+                    .unwrap();
+            let mut rng = rand::thread_rng();
+            let x = dist.sample(&mut rng);
+
+            if x == 1 {
+                let xover_point = rng.gen_range(0..=self.genes);
+
+                // println!("Before Xover: {index}");
+                // println!("xover point {xover_point}");
+                // println!("{:?}", self.chromosomes_new_generation[index]); // * self.crossover_probability;
+                // println!("{:?}", self.chromosomes_new_generation[index + 1]); // * pc;
+                for j in 0..xover_point {
+                    let a = self.chromosomes_new_generation[i][j];
+                    self.chromosomes_new_generation[i][j] =
+                        self.chromosomes_new_generation[i + 1][j];
+                    self.chromosomes_new_generation[i + 1][j] = a;
+                }
+                // println!("After Xover");
+                // println!("{xover_point}");
+                // println!("{:?}", self.chromosomes_new_generation[index]); // * self.crossover_probability;
+                // println!("{:?}", self.chromosomes_new_generation[index + 1]); // * pc;
+            }
         }
     }
 
@@ -180,33 +204,6 @@ impl Thing {
             // print!("{i}");
         }
         // println!("");
-    }
-
-    fn crossover(&mut self, index: usize) {
-        let dist =
-            WeightedIndex::new([self.crossover_probability, 1.0 - self.crossover_probability])
-                .unwrap();
-        let mut rng = rand::thread_rng();
-        let x = dist.sample(&mut rng);
-
-        if x == 1 {
-            let xover_point = rng.gen_range(0..=self.genes);
-
-            // println!("Before Xover: {index}");
-            // println!("xover point {xover_point}");
-            // println!("{:?}", self.chromosomes_new_generation[index]); // * self.crossover_probability;
-            // println!("{:?}", self.chromosomes_new_generation[index + 1]); // * pc;
-            for i in 0..xover_point {
-                let a = self.chromosomes_new_generation[index][i];
-                self.chromosomes_new_generation[index][i] =
-                    self.chromosomes_new_generation[index + 1][i];
-                self.chromosomes_new_generation[index + 1][i] = a;
-            }
-            // println!("After Xover");
-            // println!("{xover_point}");
-            // println!("{:?}", self.chromosomes_new_generation[index]); // * self.crossover_probability;
-            // println!("{:?}", self.chromosomes_new_generation[index + 1]); // * pc;
-        }
     }
 
     fn _elite() {
