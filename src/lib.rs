@@ -94,7 +94,7 @@ impl Thing {
 
             self.xover();
 
-            self.muta();
+            self.mutate();
 
             self.replace();
         }
@@ -108,35 +108,18 @@ impl Thing {
         );
     }
 
-    fn muta(&mut self) {
-        // let mut handles = vec![];
-        // let mp = self.mutation_probability;
-
+    fn mutate(&mut self) {
         for i in 0..self.population_size {
-            // let mut xxx = self.chromosomes_new_generation[i].clone();
-            // let handle = thread::spawn(move || {
-            //     let dist = WeightedIndex::new([mp, 1.0 - mp]).unwrap();
-            //     let mut rng = rand::thread_rng();
+            let dist = WeightedIndex::new([self.mutation_probability, 1.0 - self.mutation_probability]).unwrap();
+            let mut rng = rand::thread_rng();
 
-            //     for j in 0..xxx.len() {
-            //         let x = dist.sample(&mut rng);
-            //         if x == 0 {
-            //             if xxx[j] == 0 {
-            //                 xxx[j] = 1;
-            //             } else {
-            //                 xxx[j] = 0;
-            //             }
-            //         }
-            //     }
-            // });
-            self.mutate(i);
-
-            // handles.push(handle);
+            for j in 0..self.chromosomes_new_generation[i].len() {
+                let x = dist.sample(&mut rng);
+                if x == 0 {
+                    self.chromosomes_new_generation[i][j] = if self.chromosomes_new_generation[i][j] == 0 {1} else {0};
+                }
+            }
         }
-
-        // for handle in handles {
-        //     handle.join().unwrap();
-        // }
     }
 
     fn rand(&mut self) {
@@ -185,30 +168,6 @@ impl Thing {
         // for i in 0..self.chromosomes.len() {
         //     println!("{:?}", self.chromosomes[i]);
         // }
-    }
-
-    fn mutate(&mut self, index: usize) {
-        let dist = WeightedIndex::new([self.mutation_probability, 1.0 - self.mutation_probability])
-            .unwrap();
-        let mut rng = rand::thread_rng();
-
-        // println!("{:?}", chromosome);
-
-        for j in 0..self.chromosomes_new_generation[index].len() {
-            let x = dist.sample(&mut rng);
-            // println!("{x}");
-            if x == 0 {
-                if self.chromosomes_new_generation[index][j] == 0 {
-                    self.chromosomes_new_generation[index][j] = 1;
-                } else {
-                    self.chromosomes_new_generation[index][j] = 0;
-                }
-            }
-        }
-
-        // println!("{:?}", chromosome);
-
-        // println!();
     }
 
     fn randomize_chromosome(&mut self, index: usize) {
