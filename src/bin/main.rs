@@ -18,7 +18,7 @@ fn main() {
         vec![0.0; population_size],
     );
 
-    xxx.evolve(Knapsack::fitness);
+    xxx.evolve(MaxOnes::fitness);
 }
 
 struct MaxOnes;

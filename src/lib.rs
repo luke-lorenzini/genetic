@@ -64,7 +64,7 @@ impl Thing {
         self.rand();
 
         for gen in 0..self.generation {
-            // println!("Gneration: {gen}");
+            // println!("Generation: {gen}");
             for i in 0..self.population_size {
                 self.fitnesses[i] = self.calculate_fitness(f, i);
             }

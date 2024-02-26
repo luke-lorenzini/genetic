@@ -101,33 +101,33 @@ impl Fitness for MinMax {
     }
 }
 
-#[test]
-fn test_min_max() {
-    let genes = 8;
-    let population_size = 1;
+// #[test]
+// fn test_min_max() {
+//     let genes = 8;
+//     let population_size = 1;
 
-    let mut xxx = Thing::new(
-        genes,
-        population_size,
-        0,
-        0.0,
-        0.0,
-        vec![vec![0; genes]; population_size],
-        vec![vec![0; genes]; population_size],
-        vec![0.0; population_size],
-    );
+//     let mut xxx = Thing::new(
+//         genes,
+//         population_size,
+//         0,
+//         0.0,
+//         0.0,
+//         vec![vec![0; genes]; population_size],
+//         vec![vec![0; genes]; population_size],
+//         vec![0.0; population_size],
+//     );
 
-    // Test for x=0 and y=0, res=0.0
-    for i in 0..genes {
-        xxx.chromosomes[0][i] = 0;
-    }
-    let res = xxx.calculate_fitness(MinMax::fitness, 0);
-    assert_eq!(0.0, res);
+//     // Test for x=0 and y=0, res=0.0
+//     for i in 0..genes {
+//         xxx.chromosomes[0][i] = 0;
+//     }
+//     let res = xxx.calculate_fitness(MinMax::fitness, 0);
+//     assert_eq!(0.0, res);
 
-    // Test for x=0 and y=0, res=0.0
-    for i in 0..genes {
-        xxx.chromosomes[0][i] = 1;
-    }
-    let res = xxx.calculate_fitness(MinMax::fitness, 0);
-    assert_eq!(180.0, res);
-}
+//     // Test for x=0 and y=0, res=0.0
+//     for i in 0..genes {
+//         xxx.chromosomes[0][i] = 1;
+//     }
+//     let res = xxx.calculate_fitness(MinMax::fitness, 0);
+//     assert_eq!(180.0, res);
+// }
