@@ -18,7 +18,7 @@ fn main() {
         vec![0.0; population_size],
     );
 
-    xxx.evolve(MaxOnes::fitness);
+    xxx.evolve(Knapsack::fitness);
 }
 
 struct MaxOnes;
@@ -33,6 +33,10 @@ impl Fitness for MaxOnes {
 
         // println!("{fitness}");
         fitness
+    }
+
+    fn summarize(chromosome: &Vec<u8>) {
+        println!("{:?}", chromosome);
     }
 }
 
@@ -56,7 +60,12 @@ impl Fitness for OptFunction {
 
         // (x * y).into()
         (y as i32 * i32::pow(x as i32, 2) - i32::pow(x as i32, 4)) as f32
+
         // println!("x:{x} y:{y} xxx:{xxx}");
+    }
+
+    fn summarize(chromosome: &Vec<u8>) {
+        println!("{:?}", chromosome);
     }
 }
 
@@ -73,24 +82,32 @@ impl Fitness for Knapsack {
         let mut d = 0;
         let mut e = 0;
 
-        for i in 0..3 {
-            a = (a << 1) | chromosome[i];
+        // for i in 0..3 {
+        //     a = (a << 1) | chromosome[i];
+        // }
+
+        for val in chromosome.iter().take(3) {
+            a = (a << 1) | val;
         }
 
-        for i in 3..6 {
-            b = (b << 1) | chromosome[i];
+        // for i in 3..6 {
+        for val in chromosome.iter().skip(3).take(3) {
+            b = (b << 1) | val;
         }
 
-        for i in 6..9 {
-            c = (c << 1) | chromosome[i];
+        // for i in 6..9 {
+        for val in chromosome.iter().skip(6).take(3) {
+            c = (c << 1) | val;
         }
 
-        for i in 9..12 {
-            d = (d << 1) | chromosome[i];
+        // for i in 9..12 {
+        for val in chromosome.iter().skip(9).take(3) {
+            d = (d << 1) | val;
         }
 
-        for i in 12..15 {
-            e = (e << 1) | chromosome[i];
+        // for i in 12..15 {
+        for val in chromosome.iter().skip(12).take(3) {
+            e = (e << 1) | val;
         }
 
         // weight
@@ -104,13 +121,9 @@ impl Fitness for Knapsack {
 
         fitness
     }
-}
 
-struct MinMax;
-
-impl Fitness for MinMax {
-    fn fitness(chromosome: &mut Vec<u8>) -> f32 {
-        0.0
+    fn summarize(chromosome: &Vec<u8>) {
+        println!("{:?}", chromosome);
     }
 }
 
@@ -198,12 +211,7 @@ fn test_opt_function() {
     assert_eq!(12.0, res);
 }
 
-#[test]
-fn test_knapsack() {
-    todo!("test knapsack")
-}
-
-#[test]
-fn test_min_max() {
-    todo!("test min max")
-}
+// #[test]
+// fn test_knapsack() {
+//     todo!("test knapsack")
+// }

@@ -15,6 +15,7 @@ pub struct Thing {
 
 pub trait Fitness {
     fn fitness(chromosome: &mut Vec<u8>) -> f32;
+    fn summarize(chromosome: &Vec<u8>);
 }
 
 impl Default for Thing {
